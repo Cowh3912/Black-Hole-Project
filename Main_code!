@@ -1,0 +1,51 @@
+require 'ruby2d'
+set width: 1300
+set height: 975
+@Backdrop = Image.new('images/Space1.jpg',
+          x: 0,
+          y: 0,
+          width: 1300,
+          height: 975,
+         )
+@circ = Circle.new(x: 100 , y: 850, radius: rand(10..100), sectors: 80, color: 'red')
+@blackhole = Image.new('images/New.xcf', x: 450 , y: 300, width: 300, height: 300)
+@blackhole.width = rand(300..400)
+@blackhole.height = @blackhole.width
+@sd = Sprite.new('images/StardustHope2.png', x: @blackhole.x - 140, y: @blackhole.y - 150, width: 600, height: 600, clip_width: 600, time: 75, loop: false)
+tick = 0
+angle = 0
+angle2 = 0
+angle3 = 0
+on :mouse_down do |event|
+  puts event.x, event.y
+end
+
+update do
+    if tick % 2 == 0
+      angle += 1
+      angle2 += 1.4
+      angle3 += 1
+      @blackhole.rotate = angle
+      @sd.rotate = angle2
+      @Backdrop.rotate = angle3
+    end
+    tick += 1
+if @circ.x < @blackhole.x
+     @circ.x += 2
+elsif @circ.x > @blackhole.x
+ @circ.x += 6
+end
+if @circ.y > @blackhole.y
+  @circ.y -= 2
+end
+if @blackhole.contains?(@circ.x, @circ.y)
+  @circ.radius -= 2
+  if @circ.radius <= 0
+    @circ.radius = 0
+  end
+  if @circ.radius >= 1
+    @sd.play
+  end
+end
+end
+show
